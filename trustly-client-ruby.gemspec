@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path("../lib", __FILE__)
 #$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "trustly/version"
+#require "trustly/version"
 
 Gem::Specification.new do |gem|
   gem.name    = 'trustly-client-ruby'
-  gem.version = Trustly::VERSION
+  gem.version = '0.0.5'
   gem.date    = Date.today.to_s
 
   gem.summary = "Trustly Client Ruby Support"
