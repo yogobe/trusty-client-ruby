@@ -1,3 +1,3 @@
-module Trustly
+module Trustly do
 
 end
