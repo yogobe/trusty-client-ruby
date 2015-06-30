@@ -8,7 +8,7 @@ class Trustly::Api::Signed < Trustly::Api
       :host        => 'test.trustly.com',
       :port        => 443,
       :is_https    => true,
-      :private_pem => "#{Rails.root}/certs/trustly/test.acuerdalo.private.pem",
+      :private_pem => "#{Rails.root}/certs/trustly/test.merchant.private.pem",
       :public_pem  => "#{Rails.root}/certs/trustly/test.trustly.public.pem"
     }.merge(_options)
 
