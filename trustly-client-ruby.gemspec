@@ -21,5 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('rspec', [">= 2.0.0"])
 
   # ensure the gem is built out of versioned files
-  gem.files = Dir['{lib}/**/*', 'README*', 'LICENSE*']
+  gem.files    	    = Dir['{lib}/**/*', 'README*', 'LICENSE*']
+  gem.require_paths = ["lib"]
 end
