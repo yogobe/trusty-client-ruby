@@ -1,6 +1,7 @@
 module Trustly
 end
 
+require "trustly/exception"
 require "trustly/exception/authentification_error"
 require "trustly/exception/connection_error"
 require "trustly/exception/data_error"
