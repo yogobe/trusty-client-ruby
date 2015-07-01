@@ -3,15 +3,19 @@ class Trustly::JSONRPCNotificationRequest < Trustly::Data
   attr_accessor :notification_body, :payload
 
   def initialize(notification_body)
-    super
+    super()
     self.notification_body = notification_body
-    begin
-      self.payload = JSON.parse(self.notification_body)
-    rescue JSON::ParserError => e 
-      raise Trustly::Exception::DataError, e.message
-    end
+    unless self.notification_body.is_a?(Hash)
+      begin
+        self.payload = JSON.parse(self.notification_body)
+      rescue JSON::ParserError => e 
+        raise Trustly::Exception::DataError, e.message
+      end
 
-    raise Trustly::Exception::JSONRPCVersionError, 'JSON RPC Version #{(self.get_version()} is not supported' if self.get_version() != '1.1'
+      raise Trustly::Exception::JSONRPCVersionError, 'JSON RPC Version #{(self.get_version()} is not supported' if self.get_version() != '1.1'
+    else
+      self.payload = self.notification_body.deep_stringify_keys
+    end
   end
 
   def get_version()

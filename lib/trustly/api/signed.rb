@@ -110,6 +110,24 @@ class Trustly::Api::Signed < Trustly::Api
     #options["HoldNotifications"] = "1" unless 
   end
 
+  def refund(_options)
+    options = {
+      "OrderID" => "EUR"
+    }.merge(_options)
+
+    # check for required options
+    ["OrderID","Amount","Currency"].each{|req_attr| raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[],req_attr).nil? }
+
+    request = Trustly::Data::JSONRPCRequest.new('Deposit',options,nil)
+    return self.call_rpc(request)
+  end
+
+  def notification_response(notification,success=true)
+    response = Trustly::JSONRPCNotificationResponse.new(notification,success)
+    response.set_signature(self.sign_merchant_request(notification))
+    return notification
+  end
+
   def withdraw(_options)
 
   end
