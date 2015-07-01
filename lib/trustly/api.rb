@@ -46,6 +46,14 @@ class Trustly::Api
     raise NotImplementedError
   end
 
+  def verify_trustly_signed_notification(response)
+    method    = response.get_method()
+    uuid      = response.get_uuid()
+    signature = response.get_signature()
+    data      = response.get_data()
+    return self._verify_trustly_signed_data(method, uuid, signature, data)
+  end
+
   protected
 
   def _verify_trustly_signed_data(method, uuid, signature, data)
@@ -64,13 +72,6 @@ class Trustly::Api
     return self._verify_trustly_signed_data(method, uuid, signature, data)
   end
 
-  def verify_trustly_signed_notification(response)
-    method    = response.get_method()
-    uuid      = response.get_uuid()
-    signature = response.get_signature()
-    data      = response.get_data()
-    return self._verify_trustly_signed_data(method, uuid, signature, data)
-  end
 
   def set_host(host=nil,port=nil,is_https=nil)
     self.api_host = host          unless host.nil?
