@@ -1,3 +1,3 @@
 module Trustly
-  VERSION = "0.1.93"
+  VERSION = "0.1.95"
 end

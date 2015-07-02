@@ -125,6 +125,17 @@ You can check if there was an error:
 
 ### Refund call
 
+Required parameters:
+
+- OrderID
+- Amount
+- Currency / default to "EUR"
+
+Example:
+
+```ruby
+> api.refund({"OrderID"=>2205700591,"Amount"=>3,"Currency"=>"EUR"})
+```
 
 
 ### Notifications

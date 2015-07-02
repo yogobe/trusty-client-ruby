@@ -112,13 +112,13 @@ class Trustly::Api::Signed < Trustly::Api
 
   def refund(_options)
     options = {
-      "OrderID" => "EUR"
+      "Currency" => "EUR"
     }.merge(_options)
 
     # check for required options
     ["OrderID","Amount","Currency"].each{|req_attr| raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[],req_attr).nil? }
 
-    request = Trustly::Data::JSONRPCRequest.new('Deposit',options,nil)
+    request = Trustly::Data::JSONRPCRequest.new('Refund',options,nil)
     return self.call_rpc(request)
   end
 
