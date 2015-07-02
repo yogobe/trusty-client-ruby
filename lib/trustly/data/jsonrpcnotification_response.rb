@@ -6,9 +6,9 @@ class Trustly::JSONRPCNotificationResponse < Trustly::Data
     method = request.get_method()
 
     self.set('version','1.1')
-    self.set_result('uuid',uuid)     unless uuid.nil?
-    self.set_result('method',method) unless method.nil?
-    self.set_data('success', (!success.nil? && !success ? 'FAILED' : 'OK' ))
+    self.set_result('uuid',   uuid)       unless uuid.nil?
+    self.set_result('method', method)     unless method.nil?
+    self.set_data(  'status', (!success.nil? && !success ? 'FAILED' : 'OK' ))
   end
 
   def set_signature(signature)
