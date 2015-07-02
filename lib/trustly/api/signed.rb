@@ -125,7 +125,7 @@ class Trustly::Api::Signed < Trustly::Api
   def notification_response(notification,success=true)
     response = Trustly::JSONRPCNotificationResponse.new(notification,success)
     response.set_signature(self.sign_merchant_request(notification))
-    return notification
+    return response
   end
 
   def withdraw(_options)
