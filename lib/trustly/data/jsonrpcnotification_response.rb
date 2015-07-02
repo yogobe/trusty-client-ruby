@@ -1,7 +1,7 @@
 class Trustly::JSONRPCNotificationResponse < Trustly::Data
   
   def initialize(request,success=nil)
-    super
+    super()
     uuid   = request.get_uuid()
     method = request.get_method()
 
