@@ -14,7 +14,7 @@ require "trustly/data/response"
 require "trustly/data/jsonrpc_request"
 require "trustly/data/jsonrpc_response"
 require "trustly/data/jsonrpcnotification_request"
-require "trustly/data/jsonrpcnotification_request"
+require "trustly/data/jsonrpcnotification_response"
 
 require "trustly/api"
 require "trustly/api/signed"
