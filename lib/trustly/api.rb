@@ -12,7 +12,7 @@ class Trustly::Api
       end
     elsif object.is_a?(Hash)
       # Its a Hash
-      object.sort.to_h.each do |key,value|
+      Hash[object.sort.each{}].each do |key,value|
         serialized.concat(key.to_s).concat(serialize_data(value))
       end
     else
