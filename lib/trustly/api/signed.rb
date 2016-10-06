@@ -99,7 +99,7 @@ class Trustly::Api::Signed < Trustly::Api
       "Currency","Country","IP",
       "SuccessURL","FailURL","TemplateURL","URLTarget",
       "MobilePhone","Firstname","Lastname","NationalIdentificationNumber",
-      "ShopperStatement"
+      "Email", "ShopperStatement"
     )
 
     data       = options.slice("NotificationURL","EndUserID","MessageID")
@@ -107,7 +107,7 @@ class Trustly::Api::Signed < Trustly::Api
     # check required fields
     request = Trustly::Data::JSONRPCRequest.new('Deposit',data,attributes)
     return self.call_rpc(request)
-    #options["HoldNotifications"] = "1" unless 
+    #options["HoldNotifications"] = "1" unless
   end
 
   def refund(_options)
