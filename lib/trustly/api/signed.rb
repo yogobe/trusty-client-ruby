@@ -21,7 +21,7 @@ class Trustly::Api::Signed < Trustly::Api
     self.api_username = options.try(:[],:username)
     self.api_password = options.try(:[],:password)
     self.is_https     = options.try(:[],:is_https)
-    self.url_path     = '/api/1'
+    self.url_path     = options[:url_path] || '/api/1'
 
     raise Trustly::Exception::AuthentificationError, "Username not valid" if self.api_username.nil?
     raise Trustly::Exception::AuthentificationError, "Password not valid" if self.api_password.nil?
@@ -63,7 +63,7 @@ class Trustly::Api::Signed < Trustly::Api
   end
 
   def url_path(request=nil)
-    return '/api/1'
+    return @url_path
   end
 
   def call_rpc(request)
