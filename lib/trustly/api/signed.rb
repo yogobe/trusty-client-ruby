@@ -128,6 +128,18 @@ class Trustly::Api::Signed < Trustly::Api
     return response
   end
 
+  def view_automatic_settlement_details_csv(_options)
+    options = {
+      "Currency" => "EUR"
+    }.merge(_options)
+
+    # check for required options
+    ["SettlementDate","Currency"].each{|req_attr| raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[],req_attr).nil? }
+
+    request = Trustly::Data::JSONRPCRequest.new('ViewAutomaticSettlementDetailsCSV',options,nil)
+    return self.call_rpc(request)
+  end
+
   def withdraw(_options)
 
   end
