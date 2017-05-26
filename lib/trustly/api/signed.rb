@@ -99,7 +99,7 @@ class Trustly::Api::Signed < Trustly::Api
       "Currency","Country","IP",
       "SuccessURL","FailURL","TemplateURL","URLTarget",
       "MobilePhone","Firstname","Lastname","NationalIdentificationNumber",
-      "Email", "ShopperStatement"
+      "Email", "RequestDirectDebitMandate", "ShopperStatement"
     )
 
     data       = options.slice("NotificationURL","EndUserID","MessageID")
