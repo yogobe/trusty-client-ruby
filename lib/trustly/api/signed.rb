@@ -122,6 +122,31 @@ class Trustly::Api::Signed < Trustly::Api
     return self.call_rpc(request)
   end
 
+  def charge(_options)
+    options = {
+      "NotificationURL"   => "https://test.trustly.com/demo/notifyd_test",
+      "Amount"            => 0,
+      "Currency"          => "EUR",
+    }.merge(_options)
+
+    # check required fields
+    ["AccountID", "NotificationURL", "EndUserID", "MessageID", "Amount", "Currency"].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[],req_attr).nil?
+    end
+
+    raise Trustly::Exception::DataError, "Amount is 0" if options["Amount"].nil? || options["Amount"].to_f <= 0.0
+
+    attributes = options.slice(
+      "ShopperStatement", "Email"
+    )
+
+    data       = options.slice("AccountID", "NotificationURL", "EndUserID", "MessageID", "Amount", "Currency")
+
+    request = Trustly::Data::JSONRPCRequest.new('Charge', data, attributes)
+    return self.call_rpc(request)
+    #options["HoldNotifications"] = "1" unless
+  end
+
   def notification_response(notification,success=true)
     response = Trustly::JSONRPCNotificationResponse.new(notification,success)
     response.set_signature(self.sign_merchant_request(response))
