@@ -149,7 +149,7 @@ class Trustly::Api::Signed < Trustly::Api
 
   def direct_debit_mandate_with_payment(_options)
     # check for required fields
-    %w[Username Password MessageID EndUserID NotificationURL MerchantReference Country Currency Amount
+    %w[MessageID EndUserID NotificationURL MerchantReference Country Currency Amount
        Firstname Lastname Email MobilePhone SuccessURL FailURL].each do |req_attr|
       raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
     end
@@ -158,7 +158,7 @@ class Trustly::Api::Signed < Trustly::Api
 
     attributes = options.slice('MerchantReference', 'Country', 'Currency', 'Amount', 'Firstname', 'Lastname', 'Email',
                                'MobilePhone', 'SuccessURL', 'FailURL')
-    data = options.slice('Username', 'Password', 'MessageID', 'EndUserID', 'NotificationURL')
+    data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
 
     request = Trustly::Data::JSONRPCRequest.new('DirectDebitMandateWithPayment', data, attributes)
 
