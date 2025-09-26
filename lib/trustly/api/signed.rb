@@ -147,7 +147,16 @@ class Trustly::Api::Signed < Trustly::Api
     #options["HoldNotifications"] = "1" unless
   end
 
-  def direct_debit_mandate_with_payment(options)
+  def direct_debit_mandate_with_payment(_options)
+    options = {
+      'MobilePhone' => '',
+      'DateOfBirth' => '',
+      'AddressLine1' => '',
+      'AddressLine2' => '',
+      'AddressCity' => '',
+      'AddressPostalCode' => '',
+      'AddressCountry' => ''
+    }.merge(_options)
     # check for required fields
     %w[MessageID EndUserID NotificationURL MerchantReference Country Currency Amount
        Firstname Lastname Email SuccessURL FailURL].each do |req_attr|
@@ -157,7 +166,8 @@ class Trustly::Api::Signed < Trustly::Api
     raise Trustly::Exception::DataError, 'Amount is 0' if options['Amount'].nil? || options['Amount'].to_f <= 0.0
 
     attributes = options.slice('MerchantReference', 'Country', 'Currency', 'Amount', 'Firstname', 'Lastname', 'Email',
-                               'SuccessURL', 'FailURL')
+                               'SuccessURL', 'FailURL', 'Locale', 'MobilePhone', 'DateOfBirth', 'AddressLine1',
+                               'AddressLine2', 'AddressCity', 'AddressPostalCode', 'AddressCountry')
     data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
 
     request = Trustly::Data::JSONRPCRequest.new('DirectDebitMandateWithPayment', data, attributes)
