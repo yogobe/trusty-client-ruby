@@ -165,6 +165,19 @@ class Trustly::Api::Signed < Trustly::Api
     call_rpc(request)
   end
 
+  def direct_debit(options)
+    # check for required fields
+    %w[MessageID NotificationURL AccountID Amount Currency].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
+    end
+
+    raise Trustly::Exception::DataError, 'Amount is 0' if options['Amount'].nil? || options['Amount'].to_f <= 0.0
+
+    data = options.slice('MessageID', 'NotificationURL', 'AccountID', 'Amount', 'Currency')
+    request = Trustly::Data::JSONRPCRequest.new('DirectDebit', data, nil)
+    call_rpc(request)
+  end
+
   def notification_response(notification,success=true)
     response = Trustly::JSONRPCNotificationResponse.new(notification,success)
     response.set_signature(self.sign_merchant_request(response))
