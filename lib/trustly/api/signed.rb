@@ -147,7 +147,7 @@ class Trustly::Api::Signed < Trustly::Api
     #options["HoldNotifications"] = "1" unless
   end
 
-  def direct_debit_mandate_with_payment(_options)
+  def direct_debit_mandate_with_payment(options)
     # check for required fields
     %w[MessageID EndUserID NotificationURL MerchantReference Country Currency Amount
        Firstname Lastname Email MobilePhone SuccessURL FailURL].each do |req_attr|
