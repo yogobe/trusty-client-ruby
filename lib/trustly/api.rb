@@ -98,7 +98,9 @@ class Trustly::Api
     uri                  = self.uri(request)
     http_req             = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
     http_req.body        = request.json()
+    puts "http_req.body: #{http_req.body.inspect}"
     http_res             = Net::HTTP.start(uri.hostname, uri.port,{use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |http| http.request(http_req) }
+    puts "http_res: #{http_res.inspect}"
     return self.handle_response(request,http_res)
   end
 
