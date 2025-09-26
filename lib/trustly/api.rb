@@ -98,8 +98,29 @@ class Trustly::Api
     uri                  = self.uri(request)
     http_req             = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
     http_req.body        = request.json()
+
+    # Log request and response to trustly_debug.log
+    log_trustly_debug("Request Body", http_req.body)
+
     http_res             = Net::HTTP.start(uri.hostname, uri.port,{use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |http| http.request(http_req) }
+
+    log_trustly_debug("Response", {
+      code: http_res.code,
+      message: http_res.message,
+      body: http_res.body
+    })
+
     return self.handle_response(request,http_res)
+  end
+
+  private
+
+  def log_trustly_debug(label, data)
+    return unless defined?(Rails) && Rails.env.staging?
+
+    logger = Logger.new('log/trustly_debug2.log')
+    logger.level = 1
+    logger.info("#{label}: #{data.inspect}")
   end
 
 
