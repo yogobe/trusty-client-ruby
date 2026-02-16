@@ -102,7 +102,7 @@ class Trustly::Api
     # Log request and response to trustly_debug.log
     log_trustly_debug("Request Body", http_req.body)
 
-    http_res             = Net::HTTP.start(uri.hostname, uri.port,{use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |http| http.request(http_req) }
+    http_res             = Net::HTTP.start(uri.hostname, uri.port,{use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER}) { |http| http.request(http_req) }
 
     log_trustly_debug("Response", {
       code: http_res.code,

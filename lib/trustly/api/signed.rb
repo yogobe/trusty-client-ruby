@@ -183,8 +183,46 @@ class Trustly::Api::Signed < Trustly::Api
 
     raise Trustly::Exception::DataError, 'Amount is 0' if options['Amount'].nil? || options['Amount'].to_f <= 0.0
 
+    attributes = options.slice('ShopperStatement', 'PaymentDate', 'CollectionType', 'MerchantReference')
     data = options.slice('MessageID', 'NotificationURL', 'AccountID', 'Amount', 'Currency')
-    request = Trustly::Data::JSONRPCRequest.new('DirectDebit', data, nil)
+    request = Trustly::Data::JSONRPCRequest.new('DirectDebit', data, attributes.presence)
+    call_rpc(request)
+  end
+
+  def direct_debit_mandate(_options)
+    options = {
+      'MobilePhone' => '',
+      'DateOfBirth' => '',
+      'AddressLine1' => '',
+      'AddressLine2' => '',
+      'AddressCity' => '',
+      'AddressPostalCode' => '',
+      'AddressCountry' => ''
+    }.merge(_options)
+
+    # check for required fields
+    %w[MessageID EndUserID NotificationURL MerchantReference Country Currency
+       Firstname Lastname Email SuccessURL FailURL].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
+    end
+
+    attributes = options.slice('MerchantReference', 'Country', 'Currency', 'Firstname', 'Lastname', 'Email',
+                               'SuccessURL', 'FailURL', 'Locale', 'MobilePhone', 'DateOfBirth', 'AddressLine1',
+                               'AddressLine2', 'AddressCity', 'AddressPostalCode', 'AddressCountry')
+    data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
+
+    request = Trustly::Data::JSONRPCRequest.new('DirectDebitMandate', data, attributes)
+    call_rpc(request)
+  end
+
+  def cancel_direct_debit_mandate(options)
+    # check for required fields
+    %w[MessageID NotificationURL AccountID].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
+    end
+
+    data = options.slice('MessageID', 'NotificationURL', 'AccountID')
+    request = Trustly::Data::JSONRPCRequest.new('CancelDirectDebitMandate', data, nil)
     call_rpc(request)
   end
 
