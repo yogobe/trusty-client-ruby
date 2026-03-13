@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    trustly-client-ruby (0.2.0)
+    trustly-client-ruby (0.3.0)
       rake
 
 GEM
