@@ -248,9 +248,7 @@ class Trustly::Api::Signed < Trustly::Api
     call_rpc(request)
   end
 
-  def refund_direct_debit(_options)
-    options = {}.merge(_options)
-
+  def refund_direct_debit(options)
     # check for required fields
     %w[OrderID Amount Currency MessageID NotificationURL].each do |req_attr|
       raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
