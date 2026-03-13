@@ -226,6 +226,52 @@ class Trustly::Api::Signed < Trustly::Api
     call_rpc(request)
   end
 
+  def import_direct_debit_mandate(_options)
+    options = {
+      'Email' => '',
+      'MobilePhone' => '',
+      'DateOfBirth' => ''
+    }.merge(_options)
+
+    # check for required fields
+    %w[MessageID EndUserID NotificationURL AccountID ImportType MerchantReference
+       Firstname Lastname NationalIdentificationNumber].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
+    end
+
+    attributes = options.slice('AccountID', 'ImportType', 'MerchantReference',
+                               'Firstname', 'Lastname', 'NationalIdentificationNumber',
+                               'Email', 'MobilePhone', 'DateOfBirth')
+    data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
+
+    request = Trustly::Data::JSONRPCRequest.new('ImportDirectDebitMandate', data, attributes)
+    call_rpc(request)
+  end
+
+  def refund_direct_debit(options)
+    # check for required fields
+    %w[OrderID Amount Currency MessageID NotificationURL].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
+    end
+
+    raise Trustly::Exception::DataError, 'Amount is 0' if options['Amount'].nil? || options['Amount'].to_f <= 0.0
+
+    data = options.slice('OrderID', 'Amount', 'Currency', 'MessageID', 'NotificationURL')
+    request = Trustly::Data::JSONRPCRequest.new('RefundDirectDebit', data, nil)
+    call_rpc(request)
+  end
+
+  def cancel_direct_debit(options)
+    # check for required fields
+    %w[OrderID MessageID NotificationURL].each do |req_attr|
+      raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
+    end
+
+    data = options.slice('OrderID', 'MessageID', 'NotificationURL')
+    request = Trustly::Data::JSONRPCRequest.new('CancelDirectDebit', data, nil)
+    call_rpc(request)
+  end
+
   def notification_response(notification,success=true)
     response = Trustly::JSONRPCNotificationResponse.new(notification,success)
     response.set_signature(self.sign_merchant_request(response))

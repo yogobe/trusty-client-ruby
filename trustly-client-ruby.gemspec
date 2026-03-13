@@ -19,7 +19,9 @@ Gem::Specification.new do |gem|
 
 
   gem.add_dependency('rake')
-  gem.add_development_dependency('rspec', [">= 2.0.0"])
+  gem.add_development_dependency('rspec', [">= 3.0.0"])
+  gem.add_development_dependency('webmock', [">= 3.0.0"])
+  gem.add_development_dependency('activesupport', [">= 6.0.0"])
 
   # ensure the gem is built out of versioned files
   gem.files    	    = Dir['{lib}/**/*', 'README*', 'LICENSE*']
