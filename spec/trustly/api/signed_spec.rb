@@ -197,6 +197,30 @@ RSpec.describe Trustly::Api::Signed do
         expect(response).to be_success
         expect(response.get_method).to eq('DirectDebitMandateWithPayment')
       end
+
+      it 'excludes blank optional fields from the request' do
+        request_body = nil
+        stub_request(:post, 'https://test.trustly.com/api/1').to_return do |request|
+          request_body = JSON.parse(request.body)
+          { status: 200, body: { version: '1.1', result: { method: 'DirectDebitMandateWithPayment', uuid: uuid, data: { 'orderid' => orderid, 'result' => '1' } } }.to_json }
+        end
+        api.direct_debit_mandate_with_payment(valid_options)
+        attributes = request_body.dig('params', 'Data', 'Attributes') || {}
+        expect(attributes).not_to have_key('MobilePhone')
+        expect(attributes).not_to have_key('DateOfBirth')
+        expect(attributes).not_to have_key('AddressLine1')
+      end
+
+      it 'includes optional fields when explicitly provided' do
+        request_body = nil
+        stub_request(:post, 'https://test.trustly.com/api/1').to_return do |request|
+          request_body = JSON.parse(request.body)
+          { status: 200, body: { version: '1.1', result: { method: 'DirectDebitMandateWithPayment', uuid: uuid, data: { 'orderid' => orderid, 'result' => '1' } } }.to_json }
+        end
+        api.direct_debit_mandate_with_payment(valid_options.merge('MobilePhone' => '+46701234567'))
+        attributes = request_body.dig('params', 'Data', 'Attributes') || {}
+        expect(attributes['MobilePhone']).to eq('+46701234567')
+      end
     end
 
     context 'when API returns error' do

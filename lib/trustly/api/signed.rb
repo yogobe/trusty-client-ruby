@@ -148,15 +148,7 @@ class Trustly::Api::Signed < Trustly::Api
   end
 
   def direct_debit_mandate_with_payment(_options)
-    options = {
-      'MobilePhone' => '',
-      'DateOfBirth' => '',
-      'AddressLine1' => '',
-      'AddressLine2' => '',
-      'AddressCity' => '',
-      'AddressPostalCode' => '',
-      'AddressCountry' => ''
-    }.merge(_options)
+    options = _options.dup
     # check for required fields
     %w[MessageID EndUserID NotificationURL MerchantReference Country Currency Amount
        Firstname Lastname Email SuccessURL FailURL].each do |req_attr|
@@ -168,6 +160,7 @@ class Trustly::Api::Signed < Trustly::Api
     attributes = options.slice('MerchantReference', 'Country', 'Currency', 'Amount', 'Firstname', 'Lastname', 'Email',
                                'SuccessURL', 'FailURL', 'Locale', 'MobilePhone', 'DateOfBirth', 'AddressLine1',
                                'AddressLine2', 'AddressCity', 'AddressPostalCode', 'AddressCountry')
+    attributes.reject! { |_, v| v.nil? || v == '' }
     data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
 
     request = Trustly::Data::JSONRPCRequest.new('DirectDebitMandateWithPayment', data, attributes)
@@ -190,15 +183,7 @@ class Trustly::Api::Signed < Trustly::Api
   end
 
   def direct_debit_mandate(_options)
-    options = {
-      'MobilePhone' => '',
-      'DateOfBirth' => '',
-      'AddressLine1' => '',
-      'AddressLine2' => '',
-      'AddressCity' => '',
-      'AddressPostalCode' => '',
-      'AddressCountry' => ''
-    }.merge(_options)
+    options = _options.dup
 
     # check for required fields
     %w[MessageID EndUserID NotificationURL MerchantReference Country Currency
@@ -209,6 +194,7 @@ class Trustly::Api::Signed < Trustly::Api
     attributes = options.slice('MerchantReference', 'Country', 'Currency', 'Firstname', 'Lastname', 'Email',
                                'SuccessURL', 'FailURL', 'Locale', 'MobilePhone', 'DateOfBirth', 'AddressLine1',
                                'AddressLine2', 'AddressCity', 'AddressPostalCode', 'AddressCountry')
+    attributes.reject! { |_, v| v.nil? || v == '' }
     data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
 
     request = Trustly::Data::JSONRPCRequest.new('DirectDebitMandate', data, attributes)
@@ -227,11 +213,7 @@ class Trustly::Api::Signed < Trustly::Api
   end
 
   def import_direct_debit_mandate(_options)
-    options = {
-      'Email' => '',
-      'MobilePhone' => '',
-      'DateOfBirth' => ''
-    }.merge(_options)
+    options = _options.dup
 
     # check for required fields
     %w[MessageID EndUserID NotificationURL AccountID ImportType MerchantReference
@@ -242,6 +224,7 @@ class Trustly::Api::Signed < Trustly::Api
     attributes = options.slice('AccountID', 'ImportType', 'MerchantReference',
                                'Firstname', 'Lastname', 'NationalIdentificationNumber',
                                'Email', 'MobilePhone', 'DateOfBirth')
+    attributes.reject! { |_, v| v.nil? || v == '' }
     data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
 
     request = Trustly::Data::JSONRPCRequest.new('ImportDirectDebitMandate', data, attributes)
