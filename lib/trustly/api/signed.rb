@@ -224,6 +224,7 @@ class Trustly::Api::Signed < Trustly::Api
     attributes = options.slice('AccountID', 'ImportType', 'MerchantReference',
                                'Firstname', 'Lastname', 'NationalIdentificationNumber',
                                'Email', 'MobilePhone', 'DateOfBirth')
+    attributes['Country'] = 'SE'
     attributes.reject! { |_, v| v.nil? || v == '' }
     data = options.slice('MessageID', 'EndUserID', 'NotificationURL')
 
