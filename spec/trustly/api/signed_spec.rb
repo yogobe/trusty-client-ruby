@@ -103,6 +103,24 @@ RSpec.describe Trustly::Api::Signed do
         expect(response.error_msg).to eq('ERROR_NOT_ALLOWED')
       end
     end
+
+    context 'when MerchantReference is provided' do
+      it 'sends MerchantReference in Data, not in Attributes' do
+        captured_request = nil
+        allow(api).to receive(:call_rpc) do |req|
+          captured_request = req
+          instance_double(Trustly::Data::JSONRPCResponse, success?: true, error?: false, get_method: 'DirectDebit')
+        end
+
+        options = valid_options.merge('MerchantReference' => 'ref-abc-123', 'ShopperStatement' => 'Yogobe')
+        api.direct_debit(options)
+
+        # MerchantReference must be a top-level Data field (per Trustly DirectDebit docs)
+        expect(captured_request.get_data('MerchantReference')).to eq('ref-abc-123')
+        # Attributes is present (ShopperStatement) but must not contain MerchantReference
+        expect(captured_request.get_attribute('MerchantReference')).to be_nil
+      end
+    end
   end
 
   # ---- direct_debit_mandate ----

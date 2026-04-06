@@ -176,8 +176,8 @@ class Trustly::Api::Signed < Trustly::Api
 
     raise Trustly::Exception::DataError, 'Amount is 0' if options['Amount'].nil? || options['Amount'].to_f <= 0.0
 
-    attributes = options.slice('ShopperStatement', 'PaymentDate', 'CollectionType', 'MerchantReference')
-    data = options.slice('MessageID', 'NotificationURL', 'AccountID', 'Amount', 'Currency')
+    attributes = options.slice('ShopperStatement', 'PaymentDate', 'CollectionType')
+    data = options.slice('MessageID', 'NotificationURL', 'AccountID', 'Amount', 'Currency', 'MerchantReference')
     request = Trustly::Data::JSONRPCRequest.new('DirectDebit', data, attributes.presence)
     call_rpc(request)
   end
