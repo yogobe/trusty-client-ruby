@@ -203,11 +203,11 @@ class Trustly::Api::Signed < Trustly::Api
 
   def cancel_direct_debit_mandate(options)
     # check for required fields
-    %w[MessageID NotificationURL AccountID].each do |req_attr|
+    %w[OrderID].each do |req_attr|
       raise Trustly::Exception::DataError, "Option not valid '#{req_attr}'" if options.try(:[], req_attr).nil?
     end
 
-    data = options.slice('MessageID', 'NotificationURL', 'AccountID')
+    data = options.slice('OrderID')
     request = Trustly::Data::JSONRPCRequest.new('CancelDirectDebitMandate', data, nil)
     call_rpc(request)
   end
